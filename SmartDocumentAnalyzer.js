@@ -1,14 +1,9 @@
-import { Platform } from "react-native";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { Platform, View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
+
+const API_URL = "https://brainbuddyai.onrender.com";
 
 export default function DocumentAnalyzerScreen() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -46,6 +41,42 @@ export default function DocumentAnalyzerScreen() {
     }
   };
 
+  const analyzeFile = async () => {
+    if (!selectedFile) {
+      alert("Please select an image first.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+
+      formData.append("image", {
+        uri:
+          Platform.OS === "android"
+            ? selectedFile.uri
+            : selectedFile.uri.replace("file://", ""),
+        name: selectedFile.fileName || selectedFile.name || "image.jpg",
+        type: selectedFile.mimeType || "image/jpeg",
+      });
+
+      const response = await fetch(`${API_URL}/analyze-image`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      setSummary(data.result);
+
+    } catch (error) {
+      console.log(error);
+      setSummary("❌ Unable to analyze image.");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>📂 Smart Document Analyzer</Text>
@@ -78,77 +109,30 @@ export default function DocumentAnalyzerScreen() {
       )}
 
       <TouchableOpacity
-        style={[styles.button,{ marginTop:20}]}
-        onPress={async () => {
-  if (!selectedFile) {
-    alert("Please select an image first.");
-    return;
-  }
-
-  setLoading(true);
-
-  try {
-    const formData = new FormData();
-
-    formData.append("image", {
-      uri:
-        Platform.OS === "android"
-          ? selectedFile.uri
-          : selectedFile.uri.replace("file://", ""),
-      name:
-        selectedFile.fileName ||
-        selectedFile.name ||
-        "image.jpg",
-      type:
-        selectedFile.mimeType ||
-        "image/jpeg",
-    });
-
-    const response = await fetch(
-      "http://192.168.29.213:5000/analyze-image",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    const data = await response.json();
-
-    setSummary(data.result);
-
-  } catch (error) {
-    console.log(error);
-    setSummary("❌ Unable to analyze image.");
-  }
-
-  setLoading(false);
-}}
-
-
+        style={[styles.button, { marginTop: 20 }]}
+        onPress={analyzeFile}
       >
         <Text style={styles.buttonText}>🤖 Analyze File</Text>
       </TouchableOpacity>
 
-     {loading && (
-  <Text
-    style={{
-      textAlign: "center",
-      marginTop: 20,
-      fontWeight: "bold",
-      color: "#4A4AFF",
-    }}
-  >
-    🤖 AI is analyzing your image...
-  </Text>
-)}
+      {loading && (
+        <Text
+          style={{
+            textAlign: "center",
+            marginTop: 20,
+            fontWeight: "bold",
+            color: "#4A4AFF",
+          }}
+        >
+          🤖 AI is analyzing your image...
+        </Text>
+      )}
 
-{summary !== "" && (
-  <View style={styles.box}>
-    <Text style={{ fontSize: 16 }}>
-      {summary}
-    </Text>
-  </View>
-)}
+      {summary !== "" && (
+        <View style={styles.box}>
+          <Text style={{ fontSize: 16 }}>{summary}</Text>
+        </View>
+      )}
     </ScrollView>
   );
 }

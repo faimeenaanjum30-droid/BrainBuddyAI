@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform } from "react-native";
 
-const API_URL =
-  Platform.OS === "web"
-    ? "http://localhost:5000"
-    : "http://192.168.29.213:5000";
+const API_URL = "https://brainbuddyai.onrender.com";
 
 export default function NotesScreen() {
   const [notes, setNotes] = useState("");

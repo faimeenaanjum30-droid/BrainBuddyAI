@@ -11,7 +11,7 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-
+const API_URL = "https://brainbuddyai.onrender.com";
 export default function ChatScreenV2() {
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);

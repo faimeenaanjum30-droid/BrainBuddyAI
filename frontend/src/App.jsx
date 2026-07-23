@@ -4,17 +4,23 @@ function App() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
-  const askAI = async () => {
-    const response = await fetch("http://localhost:5000/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ question }),
-    });
+  const API_URL = "https://brainbuddyai.onrender.com";
 
-    const data = await response.json();
-    setAnswer(data.answer);
+  const askAI = async () => {
+    try {
+      const response = await fetch(`${API_URL}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question }),
+      });
+
+      const data = await response.json();
+      setAnswer(data.answer);
+    } catch (error) {
+      setAnswer("❌ Unable to connect to BrainBuddyAI.");
+    }
   };
 
   return (
