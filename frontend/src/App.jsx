@@ -43,7 +43,7 @@ function App() {
 
       <hr />
 
-      {page === "home" && <HomeScreen />}
+      {page === "home" && <HomeScreen setPage={setPage}  />}
 
       {page === "chat" && <ChatScreenV2 />}
 

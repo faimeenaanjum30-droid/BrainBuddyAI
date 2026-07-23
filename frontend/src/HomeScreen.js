@@ -1,125 +1,107 @@
 import React from "react";
-import {
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ setPage }) {
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.logo}>🧠</Text>
+    <div style={styles.container}>
 
-      <Text style={styles.title}>BrainBuddyAI</Text>
+      <div style={styles.logo}>
+        🧠
+      </div>
 
-      <Text style={styles.subtitle}>
+      <h1 style={styles.title}>
+        BrainBuddyAI
+      </h1>
+
+      <p style={styles.subtitle}>
         Your Personal AI Learning Assistant
-      </Text>
+      </p>
 
-      {/* AI Chat */}
-      <TouchableOpacity
+
+      <div
         style={styles.card}
-        onPress={() => navigation.navigate("Chat")}
+        onClick={() => setPage("chat")}
       >
-        <Text style={styles.cardTitle}>💬 AI Chat</Text>
-        <Text style={styles.cardText}>
-          Ask questions and learn with AI.
-        </Text>
-      </TouchableOpacity>
+        <h2>💬 AI Chat</h2>
+        <p>Ask questions and learn with AI.</p>
+      </div>
 
-      {/* Quiz Generator */}
-      <TouchableOpacity
+
+      <div
         style={styles.card}
-        onPress={() => navigation.navigate("Quiz")}
+        onClick={() => setPage("quiz")}
       >
-        <Text style={styles.cardTitle}>📚 Quiz Generator</Text>
-        <Text style={styles.cardText}>
-          Generate quizzes instantly.
-        </Text>
-      </TouchableOpacity>
+        <h2>📚 Quiz Generator</h2>
+        <p>Generate quizzes instantly.</p>
+      </div>
 
-      {/* Notes Summary */}
-      <TouchableOpacity
+
+      <div
         style={styles.card}
-        onPress={() => navigation.navigate("Notes")}
+        onClick={() => setPage("notes")}
       >
-        <Text style={styles.cardTitle}>📝 Notes Summary</Text>
-        <Text style={styles.cardText}>
-          Summarize long notes in seconds.
-        </Text>
-      </TouchableOpacity>
+        <h2>📝 Notes Summary</h2>
+        <p>Summarize long notes in seconds.</p>
+      </div>
 
-      {/* Study Planner */}
-      <TouchableOpacity
+
+      <div
         style={styles.card}
-        onPress={() => navigation.navigate("Planner")}
+        onClick={() => setPage("study")}
       >
-        <Text style={styles.cardTitle}>📅 Study Planner</Text>
-        <Text style={styles.cardText}>
-          Create a smart study schedule.
-        </Text>
-      </TouchableOpacity>
+        <h2>📅 Study Planner</h2>
+        <p>Create a smart study schedule.</p>
+      </div>
 
-      {/* PDF Summary */}
-      <TouchableOpacity
+
+      <div
         style={styles.card}
-        onPress={() => navigation.navigate("Document Analyzer")}
+        onClick={() => setPage("document")}
       >
-        <Text style={styles.cardTitle}>📄 Document Analyzer</Text>
-        <Text style={styles.cardText}>
-          Upload a PDF and get an AI summary.
-        </Text>
-      </TouchableOpacity>
+        <h2>📄 Document Analyzer</h2>
+        <p>Upload a document and get an AI summary.</p>
+      </div>
 
 
-    </ScrollView>
+    </div>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F5F7FF",
-    padding: 20,
+
+const styles = {
+
+  container:{
+    padding:"30px",
+    background:"#F5F7FF",
+    minHeight:"500px"
   },
 
-  logo: {
-    fontSize: 60,
-    textAlign: "center",
-    marginTop: 40,
+
+  logo:{
+    fontSize:"60px",
+    textAlign:"center"
   },
 
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "#4A4AFF",
+
+  title:{
+    textAlign:"center",
+    color:"#4A4AFF"
   },
 
-  subtitle: {
-    textAlign: "center",
-    fontSize: 16,
-    color: "#666",
-    marginBottom: 30,
+
+  subtitle:{
+    textAlign:"center",
+    color:"#666",
+    marginBottom:"30px"
   },
 
-  card: {
-    backgroundColor: "#FFFFFF",
-    padding: 20,
-    borderRadius: 15,
-    marginBottom: 20,
-    elevation: 4,
-  },
 
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
+  card:{
+    background:"white",
+    padding:"20px",
+    borderRadius:"15px",
+    marginBottom:"20px",
+    cursor:"pointer",
+    boxShadow:"0 3px 10px rgba(0,0,0,0.1)"
+  }
 
-  cardText: {
-    marginTop: 8,
-    fontSize: 15,
-    color: "#555",
-  },
-});
+};
