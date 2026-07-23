@@ -1,113 +1,102 @@
 import React, { useState } from "react";
-import { Platform } from "react-native";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
-const API_URL ="https://brainbuddyai.onrender.com";
-  
+
+const API_URL = "https://brainbuddyai.onrender.com";
+
 export default function QuizScreen() {
   const [topic, setTopic] = useState("");
   const [quiz, setQuiz] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const generateQuiz = async () => {
-  if (topic.trim() === "") return;
+    if (topic.trim() === "") return;
 
-  try {
-    const response = await fetch(`${API_URL}/quiz`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        topic: topic,
-      }),
-    });
+    setLoading(true);
 
-    const data = await response.json();
+    try {
+      const response = await fetch(`${API_URL}/quiz`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          topic: topic,
+        }),
+      });
 
-    setQuiz(data.quiz);
+      const data = await response.json();
 
-  } catch (error) {
-    
-  console.log("ERROR:", error.message);
-  setQuiz("Error: " + error.message);
-}
-  
-};
+      setQuiz(data.quiz);
+
+    } catch (error) {
+      console.log("ERROR:", error.message);
+      setQuiz("❌ Error connecting to BrainBuddyAI.");
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>📚 Quiz Generator</Text>
+    <div
+      style={{
+        padding: "30px",
+        backgroundColor: "#F5F7FF",
+        minHeight: "400px",
+      }}
+    >
+      <h2
+        style={{
+          color: "#4A4AFF",
+          textAlign: "center",
+        }}
+      >
+        📚 Quiz Generator
+      </h2>
 
-      <TextInput
-        style={styles.input}
+      <input
+        type="text"
         placeholder="Enter Topic..."
         value={topic}
-        onChangeText={setTopic}
+        onChange={(e) => setTopic(e.target.value)}
+        style={{
+          width: "300px",
+          padding: "12px",
+          borderRadius: "10px",
+          border: "1px solid #ddd",
+        }}
       />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={generateQuiz}
+      <br />
+      <br />
+
+      <button
+        onClick={generateQuiz}
+        style={{
+          backgroundColor: "#4A4AFF",
+          color: "white",
+          padding: "12px 20px",
+          border: "none",
+          borderRadius: "10px",
+          cursor: "pointer",
+          fontSize: "16px",
+        }}
       >
-        <Text style={styles.buttonText}>Generate Quiz</Text>
-      </TouchableOpacity>
+        {loading ? "Generating..." : "Generate Quiz"}
+      </button>
 
-      {quiz !== "" && (
-        <View style={styles.quizBox}>
-          <Text>{quiz}</Text>
-        </View>
+      {quiz && (
+        <div
+          style={{
+            marginTop: "20px",
+            backgroundColor: "white",
+            padding: "20px",
+            borderRadius: "12px",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          <h3>Generated Quiz:</h3>
+          <p>{quiz}</p>
+        </div>
       )}
-    </ScrollView>
+    </div>
   );
-
 }
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#F5F7FF",
-  },
-
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-    color: "#4A4AFF",
-  },
-
-  input: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 15,
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
-
-  button: {
-    backgroundColor: "#4A4AFF",
-    marginTop: 20,
-    padding: 15,
-    borderRadius: 10,
-  },
-
-  buttonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-
-  quizBox: {
-    marginTop: 20,
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 12,
-  },
-});
