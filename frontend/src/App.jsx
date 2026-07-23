@@ -1,35 +1,25 @@
+
 import { useState } from "react";
 
+import ChatScreenV2 from "./ChatScreenV2";
+import QuizScreen from "./QuizScreen";
+import NotesScreen from "./NotesScreen";
+import StudyPlannerScreen from "./StudyPlannerScreen";
+import SmartDocumentAnalyzer from "./SmartDocumentAnalyzer";
+import HomeScreen from "./HomeScreen";
+
 function App() {
-  const [page, setPage] = useState("chat");
-
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-
-  const API_URL = "https://brainbuddyai.onrender.com";
-
-  const askAI = async () => {
-    try {
-      const response = await fetch(`${API_URL}/chat`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ question }),
-      });
-
-      const data = await response.json();
-      setAnswer(data.answer);
-    } catch (error) {
-      setAnswer("❌ Unable to connect to BrainBuddyAI.");
-    }
-  };
+  const [page, setPage] = useState("home");
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Arial" }}>
+    <div style={{ padding: "20px", fontFamily: "Arial" }}>
       <h1>🧠 BrainBuddyAI</h1>
 
       <div style={{ marginBottom: "20px" }}>
+        <button onClick={() => setPage("home")}>
+          🏠 Home
+        </button>
+
         <button onClick={() => setPage("chat")}>
           🤖 AI Chat
         </button>
@@ -53,60 +43,17 @@ function App() {
 
       <hr />
 
-      {page === "chat" && (
-        <div>
-          <h2>🤖 Ask AI</h2>
+      {page === "home" && <HomeScreen />}
 
-          <input
-            type="text"
-            placeholder="Ask me anything..."
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
-            style={{
-              width: "300px",
-              padding: "10px",
-            }}
-          />
+      {page === "chat" && <ChatScreenV2 />}
 
-          <br />
-          <br />
+      {page === "quiz" && <QuizScreen />}
 
-          <button onClick={askAI}>
-            Ask AI
-          </button>
+      {page === "notes" && <NotesScreen />}
 
-          <h3>Answer:</h3>
-          <p>{answer}</p>
-        </div>
-      )}
+      {page === "study" && <StudyPlannerScreen />}
 
-      {page === "quiz" && (
-        <div>
-          <h2>📝 Quiz Generator</h2>
-          <p>Generate quizzes using BrainBuddyAI.</p>
-        </div>
-      )}
-
-      {page === "notes" && (
-        <div>
-          <h2>📚 Notes Summary</h2>
-          <p>Summarize your notes with AI.</p>
-        </div>
-      )}
-
-      {page === "study" && (
-        <div>
-          <h2>📅 Study Planner</h2>
-          <p>Create your AI study plan.</p>
-        </div>
-      )}
-
-      {page === "document" && (
-        <div>
-          <h2>📄 Document Analyzer</h2>
-          <p>Analyze your documents using AI.</p>
-        </div>
-      )}
+      {page === "document" && <SmartDocumentAnalyzer />}
     </div>
   );
 }
